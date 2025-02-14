@@ -1,8 +1,9 @@
 /bin
 /obj
 
-appsettings.json
+.env
 
 APIMain.csproj
+APIMain.csproj.rej
 APIMain.csproj.user
 

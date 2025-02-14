@@ -2,6 +2,7 @@ using APIMain.Configuration.Objects;
 using APIMain.Mapping;
 using APIMain.Swagger;
 using BackendDB.Models;
+using dotenv.net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -12,10 +13,13 @@ using System.Text;
 
 #region Setup
 var builder = WebApplication.CreateBuilder(args);
+DotEnv.Load();
 
 // Adds JWT authentication and authorization
 JwtSettings jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()
             ?? throw new NullReferenceException("appsettings.json does not have 'JwtSettings' property.");
+string jwtKey = Environment.GetEnvironmentVariable("JWT_KEY")
+            ?? throw new NullReferenceException("Environment does not have JWT key");
 builder.Services.AddAuthentication(x => {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -24,7 +28,7 @@ builder.Services.AddAuthentication(x => {
     x.TokenValidationParameters = new TokenValidationParameters {
         ValidIssuer = jwtSettings.Issuer,
         ValidAudience = jwtSettings.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
@@ -34,11 +38,11 @@ builder.Services.AddAuthentication(x => {
 builder.Services.AddAuthorization();
 
 // Setups DB and models for API
-DbConfiguration dbConnectionString = builder.Configuration.GetSection("Database").Get<DbConfiguration>()
-            ?? throw new NullReferenceException("appsettings.json does not have 'Database' property.");
+string dbConnectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+            ?? throw new NullReferenceException("Environment does not have JWT key");
 builder.Services.AddControllers();
 builder.Services.AddDbContext<TmsMainContext>(options =>
-    options.UseSqlServer(dbConnectionString.ConnectionString));
+    options.UseSqlServer(dbConnectionString));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Setups Swagger UI

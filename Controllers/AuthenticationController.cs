@@ -48,18 +48,19 @@ namespace APIMain.Controllers {
         }
 
         private string GenerateToken(User user, int expiresIn) {
-            // JWT config from appsettings.json
+            // JWT config from appsettings.json and .env
             JwtSettings jwtSettings = config.GetSection("JwtSettings").Get<JwtSettings>()
                     ?? throw new NullReferenceException("appsettings.json does not have 'JwtSettings' property.");
+            string jwtKey = Environment.GetEnvironmentVariable("JWT_KEY")
+                ?? throw new NullReferenceException("Environment does not have JWT key");
 
             // Checks if configuration is correct
-            if (string.IsNullOrEmpty(jwtSettings.Key) || jwtSettings.Key.Length < 32) {
+            if (string.IsNullOrEmpty(jwtKey) || jwtKey.Length < 32) {
                 throw new ArgumentException("JWT key must be at least 32 characters long for security.");
             }
 
             // Prepares the data for the token
-            var tokenKey = jwtSettings.Key;
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenKey));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim> {
                 new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
