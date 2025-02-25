@@ -20,19 +20,14 @@ namespace APIMain.Controllers {
             }
 
             var mappedUser = mapper.Map<User>(userData);
+            await dbContext.Users.AddAsync(mappedUser);
+            await dbContext.SaveChangesAsync();
             return Ok();
         }
 
 
         [HttpPost("oauth")]
         public async Task<IActionResult> RegisterWithOAuth([FromBody] UserSignUpData userData) {
-            if (await dbContext.Users.AnyAsync(e => e.Username == userData.Username)) {
-                return Conflict(new {
-                    Message = "User with this username already exists"
-                });
-            }
-
-            var mappedUser = mapper.Map<User>(userData);
             return Ok();
         }
     }

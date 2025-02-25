@@ -19,7 +19,7 @@ DotEnv.Load();
 JwtSettings jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()
             ?? throw new NullReferenceException("appsettings.json does not have 'JwtSettings' property.");
 string jwtKey = Environment.GetEnvironmentVariable("JWT_KEY")
-            ?? throw new NullReferenceException("Environment does not have JWT key");
+            ?? throw new NullReferenceException("Environment does not have 'JWT_KEY' variable");
 builder.Services.AddAuthentication(x => {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -39,7 +39,7 @@ builder.Services.AddAuthorization();
 
 // Setups DB and models for API
 string dbConnectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
-            ?? throw new NullReferenceException("Environment does not have JWT key");
+            ?? throw new NullReferenceException("Environment does not have 'DATABASE_URL' variable");
 builder.Services.AddControllers();
 builder.Services.AddDbContext<TmsMainContext>(options =>
     options.UseSqlServer(dbConnectionString));
@@ -60,9 +60,11 @@ builder.Services.AddSwaggerGen(options => {
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureOptions>();
 
 #warning Is this the best fix?
+string frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL")
+            ?? throw new NullReferenceException("Environment does not have 'FRONTEND_URL' variable");
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowFrontend",
-        policy => policy.WithOrigins("http://localhost:3000")
+        policy => policy.WithOrigins(frontendUrl)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
