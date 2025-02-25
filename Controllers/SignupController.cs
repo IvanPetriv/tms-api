@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace APIMain.Controllers {
     [Route("api/register")]
     [ApiController]
-    public class RegisterController(TmsMainContext dbContext,
+    public class SignupController(TmsMainContext dbContext,
                                     IConfiguration config,
                                     IMapper mapper,
                                     ILogger<AuthenticationController> logger) : ControllerBase {

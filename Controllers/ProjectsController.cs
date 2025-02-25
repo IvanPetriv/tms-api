@@ -2,12 +2,9 @@
 using AutoMapper;
 using BackendDB.ModelDTOs;
 using BackendDB.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIMain.Authentication.Jwt;
-using System.Security.Cryptography;
 
 namespace APIMain.Controllers {
     public class ProjectsController : BaseController<Project, ProjectDTO, int> {
@@ -23,23 +20,8 @@ namespace APIMain.Controllers {
             return await base.GetById(id);
         }
 
-        [HttpPost]
-        public override async Task<IActionResult> Create([FromBody] ProjectDTO objectDTO) {
-            return await base.Create(objectDTO);
-        }
-
-        [HttpPut]
-        public override async Task<IActionResult> Update([FromBody] ProjectDTO objectDTO) {
-            return await base.Update(objectDTO);
-        }
-
-        [HttpDelete("{id}")]
-        public override async Task<IActionResult> Delete(int id) {
-            return await base.Delete(id);
-        }
-
         [HttpGet("user/{id}")]
-        [ProducesResponseType(typeof(List<ProjectDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllByUserId(int id) {
             // Checks if the user has a right to access this resource
@@ -61,6 +43,21 @@ namespace APIMain.Controllers {
             // Retrieves the data
             var foundProjects = await dbContext.Projects.Where(e => e.CreatedBy == id).ToListAsync();
             return Ok(mapper.Map<List<ProjectDTO>>(foundProjects));
+        }
+
+        [HttpPost]
+        public override async Task<IActionResult> Create([FromBody] ProjectDTO objectDTO) {
+            return await base.Create(objectDTO);
+        }
+
+        [HttpPut]
+        public override async Task<IActionResult> Update([FromBody] ProjectDTO objectDTO) {
+            return await base.Update(objectDTO);
+        }
+
+        [HttpDelete("{id}")]
+        public override async Task<IActionResult> Delete(int id) {
+            return await base.Delete(id);
         }
 
 

@@ -11,11 +11,11 @@ namespace APIMain.Controllers {
     [EnableCors("AllowFrontend")]
     [Route("api/[controller]")]
     [Produces("application/json")]
-    public class LanguagesController : BaseController<Language, LanguageDTO, short> {
+    public class LocalesController : BaseController<Locale, LocaleDTO, short> {
 
-        private readonly string _tableName = nameof(Language);
+        private readonly string _tableName = nameof(Locale);
 
-        public LanguagesController(TmsMainContext dbContext, IMapper mapper, ILogger<LanguagesController> logger) : base(dbContext, mapper, logger) { }
+        public LocalesController(TmsMainContext dbContext, IMapper mapper, ILogger<LocalesController> logger) : base(dbContext, mapper, logger) { }
 
 
 

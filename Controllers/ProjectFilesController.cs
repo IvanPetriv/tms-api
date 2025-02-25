@@ -4,11 +4,11 @@ using BackendDB.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIMain.Controllers {
-    public class SourceStringsController : BaseController<SourceString, SourceStringDTO, long> {
+    public class ProjectFilesController : BaseController<ProjectFile, ProjectFileDTO, long> {
 
-        private readonly string _tableName = nameof(SourceString);
+        private readonly string _tableName = nameof(ProjectFile);
 
-        public SourceStringsController(TmsMainContext dbContext, IMapper mapper, ILogger<SourceStringsController> logger) : base(dbContext, mapper, logger) { }
+        public ProjectFilesController(TmsMainContext dbContext, IMapper mapper, ILogger<ProjectFilesController> logger) : base(dbContext, mapper, logger) { }
 
 
 
@@ -18,12 +18,12 @@ namespace APIMain.Controllers {
         }
 
         [HttpPost]
-        public override async Task<IActionResult> Create([FromBody] SourceStringDTO objectDTO) {
+        public override async Task<IActionResult> Create([FromBody] ProjectFileDTO objectDTO) {
             return await base.Create(objectDTO);
         }
 
         [HttpPut]
-        public override async Task<IActionResult> Update([FromBody] SourceStringDTO objectDTO) {
+        public override async Task<IActionResult> Update([FromBody] ProjectFileDTO objectDTO) {
             return await base.Update(objectDTO);
         }
 

@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using APIMain.Messages;
 using BackendDB.Models;
-using BackendDB.ModelDTOs;
-using Microsoft.Extensions.Logging;
 
 namespace APIMain.Controllers {
     [ApiController]

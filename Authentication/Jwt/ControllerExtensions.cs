@@ -1,5 +1,4 @@
-﻿using BackendDB.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace APIMain.Authentication.Jwt {
     public static class ControllerExtensions {

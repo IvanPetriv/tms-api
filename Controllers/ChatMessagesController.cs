@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using APIMain.Authentication.Jwt;
 
 namespace APIMain.Controllers {
     [ApiController]
@@ -31,7 +30,7 @@ namespace APIMain.Controllers {
         /// </summary>
         /// <param name="id">ID of the chat</param>
         /// <returns>Objects with the specified chat, if exist, otherwise 404 code</returns>
-        [HttpGet("user/{id}")]
+        [HttpGet("chat/{id}")]
         [ProducesResponseType(typeof(List<ChatMessageDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByChatId(long id) {
